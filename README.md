@@ -1,16 +1,17 @@
 # cudaq
 
-I've written some matrix related functions into cuda/kdb capi code.
+*Background*
+
+I've written some matrix related functions into cuda/kdb capi code, mainly for performance. I was originally motivated by trying to find faster matrix multiply, for neural network/convolutional neural network training (which I plan to talk about at a future kx meetup, hopefully this year). Nick Psaris gave me the idea of trying to integrate cuBLAS in his kx con machine learning presentation.
+
 The functions are:
 * floydwarshall: the standard shortest past algorithm for shortest paths between all nodes
-* credit matrix: a different take on shortest paths, given a credit matrix
-                 (the max credit that a counterparty can trade with another), what is the max
-                 possible credit between all counterparties going via alternate paths)
+* credit matrix: a different take on shortest paths, given a credit matrix (the max credit that a counterparty can trade with another), what is the max possible credit between all counterparties going via alternate paths)
 * gpu_mmu: a cuBLAS version of matrix multiply
 
-The performance of these 3 are all significantly faster than the fastest kdb code I've seen.
-Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q 
-code I've seen, which is:
+*Performance*
+
+The performance of these 3 are all significantly faster than the fastest kdb code I've seen.Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q code I've seen, which is:
 ```
 // floyd warshall k and q equivalent, benefits from slaves, credit matrix is very similar   
 k){x&.Q.fc[{(min y+)'x}[+x]';x]}
@@ -52,3 +53,27 @@ q)res2~flip 3000 1000#flatres
 1b
 ```
 
+*Compiling*
+
+To compile these, I've just been using:
+```
+$ cat makeqcuda.sh
+# e.g. $./makeqcuda floydwarshall
+nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/gpu_mm.so --shared -lcurand -lcublas gpu_mm.cu
+```
+
+*Loading*
+
+Load into q like a c object:
+```
+// this example has no slaves, so the pefromance of the q func could be faster
+q)creditcuda:`creditmatrix 2:(`gpu_creditmatrix;1)
+q)creditq:{x&.Q.fc[{(min y+)each x}[flip x]each;x]}
+q)m2:2000 2000#m:40000000?100i
+12 10 1 90 73 90 43 90 84 63 93 54 38 97 88 58 68 45 2 39 64 49 82 40 88 77 3..
+q)\t res:creditcuda m
+14834
+q)\t 0N!raze[res]~creditcuda m
+1b
+456
+```
