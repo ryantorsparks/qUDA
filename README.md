@@ -1,6 +1,6 @@
 # cudaq
 
-*Background*
+**Background**
 
 I've written some matrix related functions into cuda/kdb capi code, mainly for performance. I was originally motivated by trying to find faster matrix multiply, for neural network/convolutional neural network training (which I plan to talk about at a future kx meetup, hopefully this year). Nick Psaris gave me the idea of trying to integrate cuBLAS in his kx con machine learning presentation.
 
@@ -9,7 +9,7 @@ The functions are:
 * credit matrix: a different take on shortest paths, given a credit matrix (the max credit that a counterparty can trade with another), what is the max possible credit between all counterparties going via alternate paths)
 * gpu_mmu: a cuBLAS version of matrix multiply
 
-*Performance*
+**Performance**
 
 The performance of these 3 are all significantly faster than the fastest kdb code I've seen.Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q code I've seen, which is:
 ```
@@ -53,7 +53,7 @@ q)res2~flip 3000 1000#flatres
 1b
 ```
 
-*Compiling*
+**Compiling**
 
 To compile these, I've just been using:
 ```
@@ -62,7 +62,7 @@ $ cat makeqcuda.sh
 nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/gpu_mm.so --shared -lcurand -lcublas gpu_mm.cu
 ```
 
-*Loading*
+**Loading**
 
 Load into q like a c object:
 ```
