@@ -11,7 +11,7 @@ The functions are:
 
 **Performance**
 
-The performance of these 3 are all significantly faster than the fastest kdb code I've seen.Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q code I've seen, which is:
+The performance of these 3 are all significantly faster than the fastest kdb code I've seen.Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q code I've seen, which is (a slightly slimmer version of http://code.kx.com/q/cookbook/shortestpath/):
 ```
 // floyd warshall k and q equivalent, benefits from slaves, credit matrix is very similar   
 k){x&.Q.fc[{(min y+)'x}[+x]';x]}
@@ -66,14 +66,23 @@ nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/gpu_mm.so --shared -
 
 Load into q like a c object:
 ```
-// this example has no slaves, so the pefromance of the q func could be faster
+// read in cuda func using 2:
 q)creditcuda:`creditmatrix 2:(`gpu_creditmatrix;1)
+
+// q func
 q)creditq:{x&.Q.fc[{(min y+)each x}[flip x]each;x]}
+
+// 4 million element input matrix (cuda expects flat version)
 q)m2:2000 2000#m:40000000?100i
-12 10 1 90 73 90 43 90 84 63 93 54 38 97 88 58 68 45 2 39 64 49 82 40 88 77 3..
-q)\t res:creditcuda m
-14834
-q)\t 0N!raze[res]~creditcuda m
-1b
+
+// q version (I had no slaves available on my gpu server, so this should be faster)
+q)\t creditq/[m2]
+36207
+
+// cuda version
+q)\t res2:creditcuda m
 456
+
+q) res2~raze res
+1b
 ```
