@@ -12,10 +12,11 @@ The performance of these 3 are all significantly faster than the fastest kdb cod
 Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q 
 code I've seen, which is:
 ```
-   // floyd warshall, use slaves, credit matrix very similar   
-   {x&.Q.fc[{(min y+)'x}[+x]';x]}
+// floyd warshall k and q equivalent, benefits from slaves, credit matrix is very similar   
+k){x&.Q.fc[{(min y+)'x}[+x]';x]}
+q){x&.Q.fc[{(min y+)each x}[flip x]each;x]}
 ```
-The matrix multiplication code is significantly faster too, even than qml:
+The matrix multiplication code is significantly faster too, 10 times faster than even qml:
 
 ```
 // cuda BLAS requires flat input matrices, so have aflat and bflat for that input
