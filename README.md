@@ -2,9 +2,9 @@
 
 ## Background
 
-I've written some matrix-related functions into CUDA/kdb+ C API code, mainly for performance. I was originally motivated by trying to find faster matrix multiply, for neural network/convolutional neural network training (which I plan to talk about at a future Kx meetup, hopefully this year). Nick Psaris gave me the idea of trying to integrate cuBLAS in his KxCon machine-learning presentation.
+I've written some matrix-related functions into CUDA/kdb+ C API code, calling CUDA code from q via a shared object, to exploit the speed of GPU hardware. I was originally trying to find faster matrix multiply, for neural network/convolutional neural network training (which I plan to talk about at a future Kx meetup, hopefully this year). Nick Psaris gave me the idea of trying to integrate cuBLAS in his KxCon machine-learning presentation.
 
-The functions are:
+The CUDA functions are:
 * `floydwarshall`: the [standard algorithm for shortest paths](https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm) between all nodes
 * `creditmatrix`: a different take on shortest paths, given a credit matrix (the max credit that a counterparty can trade with another), what is the max possible credit between all counterparties going via alternate paths)
 * `gpu_mmu`: a cuBLAS version of matrix multiply
@@ -12,7 +12,7 @@ The functions are:
 
 ## GPU hardware
 
-All of my functions were written and tested using a Tesla K80 gpu
+All of my functions were written and tested using a Tesla K80 GPU.
 
 
 ## Performance
