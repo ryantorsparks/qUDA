@@ -82,7 +82,7 @@ To compile these, I've just been using:
 ```
 $ cat makeqcuda.sh
 # e.g. $./makeqcuda floydwarshall
-nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/gpu_mm.so --shared -lcurand -lcublas gpu_mm.cu
+nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/$1.so --shared -lcurand -lcublas $1.cu
 ```
 
 **Loading**
