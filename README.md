@@ -9,6 +9,10 @@ The functions are:
 * credit matrix: a different take on shortest paths, given a credit matrix (the max credit that a counterparty can trade with another), what is the max possible credit between all counterparties going via alternate paths)
 * gpu_mmu: a cuBLAS version of matrix multiply
 
+**GPU hardware**
+
+All of my functions were written and tested using a Tesla K80 gpu
+
 **Performance**
 
 The performance of these 3 are all significantly faster than the fastest kdb code I've seen.Floyd warshall and credit matrix functions seem to go about 10 times faster than the best q code I've seen, which is (a slightly slimmer version of http://code.kx.com/q/cookbook/shortestpath/):
