@@ -19,11 +19,11 @@ __global__ void wake_gpu_kernel(int reps)
     if (idx >= reps) return;
 }
 
-/**Kernel for parallel Floyd Warshall algorithm on gpu
+/**Kernel for parallel Floyd Warshall credit matrix  algorithm on gpu
 * 
 * @param u number vertex of which is performed relaxation paths [v1, v2]
 * @param n number of vertices in the graph G:=(V,E), n := |V(G)|
-* @param d matrix of shortest paths d(G)
+* @param d matrix of credits d(G)
 */
 __global__ void fw_kernel(const unsigned int u, const unsigned int n, int * const d)
 {
@@ -31,7 +31,6 @@ __global__ void fw_kernel(const unsigned int u, const unsigned int n, int * cons
     I v2 = blockDim.x * blockIdx.x + threadIdx.x;
     if (v1 < n && v2 < n) 
     {
-//        I newPath = d[v1 * n + u] + d[u * n + v2];
         I newPath = min(d[v1 * n + u],d[u * n + v2]);
         I oldPath = d[v1 * n + v2];
         if (newPath > oldPath)

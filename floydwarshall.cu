@@ -8,6 +8,12 @@
 #define CMCPYDTH cudaMemcpyDeviceToHost
 #define BLOCK_WIDTH 16
 
+// Note: I've adapted this from https://github.com/MTB90
+// He has also done a "block version" which performs up to 4xfaster
+// for very large matrices. Perhaps this could be adapted too one day
+// I have mostly stripped out a lot of the code, cut out the preceeding
+// matrix stuff, and tried to simplify things
+
 extern  "C" K gpu_floydwarshall(K matrix);
 
 /**Kernel for wake gpu

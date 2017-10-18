@@ -13,9 +13,6 @@
 #define N  1000
 #define M 1000
 
-// compile with:
-//   nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/gpu_mm.so --shared -lcurand -lcublas gpu_mm.cu
-
 // Export the function we will load into kdb+
 extern  "C" K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB, K C);
 
