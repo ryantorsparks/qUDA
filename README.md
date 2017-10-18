@@ -53,6 +53,25 @@ q)res2~flip 3000 1000#flatres
 1b
 ```
 
+Here's a more detailed comparison of the floyd warshall algo, running on various versions
+
+| function   | "2000x2000, cloud no slaves" | 2000x2000 on fast box+6 slaves | "4000x4000, cloud no slaves" | 4000x4000 fast box+6 slaves | 
+|------------|------------------------------|--------------------------------|------------------------------|-----------------------------| 
+| bridge     | wsfull                       | 46274 32833633920              | wsfull                       | didn't try                  | 
+| bridge1    | 17568 65650480               | 6225 32833952                  | didnt' try                   | 51735 131203488             | 
+| bridge2    | 13365 49250400               | 3446 32826032                  | 134495 196802624             | 33971 131187376             | 
+| bridgec    | 8202 592                     | 7341 592                       | 75727 592                    | 106828 592                  | 
+| bridgecuda | 388 592                      | n/a                            | 2890 592                     | n/a                         | 
+
+where the functions are
+```
+bridge:k){x&&/''x+/:\:+x}
+bridge1:k){x&(min'(+x)+\:)':x}
+bridge2:k){x&.Q.fc[{(min y+)'x}[+x]';x]}
+bridgec: c version of cuda func (.so object loaded into kdb)
+bridgecuda:cuda func
+```
+
 **Compiling**
 
 To compile these, I've just been using:
