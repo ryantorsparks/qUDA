@@ -109,3 +109,7 @@ q)\t res2:creditcuda m
 q) res2~raze res
 1b
 ```
+
+**Improvements**
+
+If anyone has any suggestions/improvements, please let me know, either with a github comment or email rspa9428@gmail.com
