@@ -1,4 +1,4 @@
-# cudaq
+# qUDA
 
 ## Background
 
