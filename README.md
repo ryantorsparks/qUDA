@@ -31,8 +31,7 @@ Matrix multiplication on a GPU server is significantly faster too, 10&times; fas
 
 q) a:1000 2000#aflat:2000000?10f
 q) b:2000 3000#bflat:6000000?10f
-q) empty:3000000#0f  // init the empty object to fill result in, takes about 10 millis if you need to do it each time
-q)\t flatres:.gpu.mm[aflat;1000;2000;bflat;2000;3000;empty]
+q)\t flatres:.gpu.mm[aflat;1000;2000;bflat;2000;3000]
 time to allocate host and device array mems: 1.358000ms
 time to copy inputs to GPU: 9.041000ms
 time to perform cublas matrix multiply: 0.024000ms
@@ -81,6 +80,9 @@ To compile these, I’ve just been using:
 ```bash
 $ cat makeqcuda.sh
 # e.g. $./makeqcuda floydwarshall
+nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/$1.so --shared $1.cu
+
+# or for matrix multiply/cuBLAS stuff
 nvcc --compiler-options '-fPIC -DKXVER=3 -O2' -o $QHOME/l64/$1.so --shared -lcurand -lcublas $1.cu
 ```
 
