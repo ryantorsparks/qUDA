@@ -14,7 +14,7 @@
 #define M 1000
 
 // Export the function we will load into kdb+
-extern  "C" K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB, K C);
+extern  "C" K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB);
 
 // Multiply the arrays A and B on GPU and save the result in C
 // C(m,n) = A(m,k) * B(k,n)
@@ -47,7 +47,7 @@ void gpu_blas_mmul(const double *A, const double *B, double *C, const int m, con
     cublasDestroy(handle);
 }
 
-K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB,  K C) {
+K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB) {
     // Allocate 3 arrays on CPU
     int nr_rows_A = rA->n;
     int nr_cols_A = cA->n;
@@ -57,6 +57,7 @@ K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB,  K C) {
     int nr_cols_C = nr_cols_B;
 
     // allocate memory, host arrays
+    K C = ktn(KF,(nr_rows_C*nr_cols_C));
     double *h_A = (double *)malloc(nr_rows_A * nr_cols_A * sizeof(double));
     double *h_B = (double *)malloc(nr_rows_B * nr_cols_B * sizeof(double));
     double *h_C = (double *)malloc(nr_rows_C * nr_cols_C * sizeof(double));
@@ -92,5 +93,5 @@ K gpu_mmf(K A, K rA, K cA, K B, K rB, K cB,  K C) {
     free(h_B);
     free(h_C);
 
-    R r1(C);
+    R(C);
 }
